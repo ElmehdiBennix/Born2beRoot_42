@@ -1,3 +1,54 @@
+# Born2beRoot:
+
+This project aims to introduce you to the wonderful world of virtualization.
+
+### Table of Contents
+- [Born2beRoot:](#born2beroot)
+    - [Table of Contents](#table-of-contents)
+  - [Born2beRoot Technical Documentation](#born2beroot-technical-documentation)
+    - [Virtualization Infrastructure](#virtualization-infrastructure)
+    - [Operating System Architecture](#operating-system-architecture)
+      - [Debian](#debian)
+      - [Rocky Linux](#rocky-linux)
+    - [Security Frameworks](#security-frameworks)
+      - [AppArmor](#apparmor)
+      - [SELinux](#selinux)
+    - [Storage Management](#storage-management)
+      - [LVM (Logical Volume Management)](#lvm-logical-volume-management)
+      - [Disk Encryption](#disk-encryption)
+    - [System Security Components](#system-security-components)
+      - [SSH Configuration](#ssh-configuration)
+      - [UFW (Uncomplicated Firewall)](#ufw-uncomplicated-firewall)
+    - [System Monitoring](#system-monitoring)
+      - [System Statistics Collection](#system-statistics-collection)
+      - [Resource Monitoring](#resource-monitoring)
+    - [Automation and Scheduling](#automation-and-scheduling)
+      - [Cron Configuration](#cron-configuration)
+    - [User Management](#user-management)
+      - [Password Policy Implementation](#password-policy-implementation)
+      - [Sudo Configuration](#sudo-configuration)
+    - [System Logging](#system-logging)
+      - [Sudo Logging](#sudo-logging)
+      - [System Logs](#system-logs)
+- [Born2beRoot Implementation Guide](#born2beroot-implementation-guide)
+  - [Initial Setup](#initial-setup)
+  - [Operating System Installation](#operating-system-installation)
+    - [Partition Setup (Bonus Configuration)](#partition-setup-bonus-configuration)
+  - [System Configuration](#system-configuration)
+  - [User Management](#user-management-1)
+  - [SSH Configuration](#ssh-configuration-1)
+  - [UFW Configuration](#ufw-configuration)
+  - [Password Policy](#password-policy)
+  - [Sudo Configuration](#sudo-configuration-1)
+  - [Monitoring Script](#monitoring-script)
+  - [Bonus Implementation](#bonus-implementation)
+    - [Wordpress, Mariadb, Php, Fail2ban and lighttpd Setup:](#wordpress-mariadb-php-fail2ban-and-lighttpd-setup)
+    - [Fail2ban Implementation](#fail2ban-implementation)
+- [Defense Preparation](#defense-preparation)
+      - [Project Signature Generation:](#project-signature-generation)
+      - [Key areas to understand before defense:](#key-areas-to-understand-before-defense)
+
+---
 
 ## Born2beRoot Technical Documentation
 
@@ -190,29 +241,10 @@ Key log files:
 
 This technical documentation provides the foundational knowledge required for implementing and maintaining the Born2beRoot system. Each component is configured according to specific security and operational requirements detailed in the project specifications.
 
+---
 # Born2beRoot Implementation Guide
 
 This guide provides a comprehensive walkthrough for implementing the Born2beRoot project, including the bonus requirements from the start. We'll be using Debian as our operating system, as it's recommended for those new to system administration.
-
-<!-- ## Table of Contents
-- [Born2beRoot Implementation Guide](#born2beroot-implementation-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Initial Setup](#initial-setup)
-  - [Operating System Installation](#operating-system-installation)
-    - [Partition Setup (Bonus Configuration)](#partition-setup-bonus-configuration)
-  - [System Configuration](#system-configuration)
-  - [User Management](#user-management-1)
-  - [SSH Configuration](#ssh-configuration-1)
-  - [UFW Configuration](#ufw-configuration)
-  - [Password Policy](#password-policy)
-  - [Sudo Configuration](#sudo-configuration-1)
-  - [Monitoring Script](#monitoring-script)
-  - [Bonus Implementation](#bonus-implementation)
-    - [Wordpress, Mariadb, Php, Fail2ban and lighttpd Setup:](#wordpress-mariadb-php-fail2ban-and-lighttpd-setup)
-    - [Fail2ban Implementation](#fail2ban-implementation)
-- [Defense Preparation](#defense-preparation)
-    - [Project Signature Generation](#project-signature-generation)
-  - [Defense Preparation](#defense-preparation-1) -->
 
 ## Initial Setup
 
@@ -226,7 +258,7 @@ This guide provides a comprehensive walkthrough for implementing the Born2beRoot
    - Create a virtual hard disk now
    - VDI (VirtualBox Disk Image)
    - Dynamically allocated
-   - 8 GB storage
+   - 30 GB storage
 
 ## Operating System Installation
 
@@ -514,6 +546,17 @@ tar -xzvf latest.tar.gz
 chown -R www-data:www-data wordpress
 ```
 
+6. Allow port 80:
+```bash
+ufw allow 80/tcp   # Allow HTTP
+ufw allow 443/tcp  # Allow HTTPS
+```
+
+7. Verify status:
+```bash
+ufw status
+```
+
 ### Fail2ban Implementation
 
 1. Install Fail2ban:
@@ -550,11 +593,19 @@ systemctl enable fail2ban
 fail2ban-client status
 ```
 
-
+---
 
 # Defense Preparation
 
-### Project Signature Generation
+Remember to test all functionality thoroughly before the defense, including:
+- SSH connection on port 4242
+- UFW rules
+- Password policy
+- Sudo logging
+- Monitoring script
+- All bonus services
+
+#### Project Signature Generation:
 
 ```bash
 # For VirtualBox on Linux
@@ -567,48 +618,22 @@ shasum path/to/virtual_disk.vdi
 shasum path/to/disk-0.qcow2
 ```
 
-Save this signature in signature.txt at the root of your repository.
+Save this signature in signature.txt at the root of your intra repository.
 
+#### Key areas to understand before defense:
 
-## Defense Preparation
+1. virtualization technology
+    - What is Virtualization? (Definition, benefits)
+    - Hypervisor Types:
+       - Type 1 (Bare Metal): KVM, VMware ESXi, Microsoft Hyper-V, Xen
+       - Type 2 (Hosted): VirtualBox, VMware Workstation
 
-Ensure you can explain:
-- The difference between aptitude and apt
-- What AppArmor is
-- How the monitoring script works
-- The purpose of each bonus service
-- Basic system administration commands
-- How to create a new user and assign groups
-- How to verify service status and configurations
-- The password policy implementation
-
-
-
-This implementation provides a secure, well-configured server that meets all mandatory and bonus requirements of the Born2beRoot project.
-
-
-Remember to test all functionality thoroughly before the defense, including:
-- SSH connection on port 4242
-- UFW rules
-- Password policy
-- Sudo logging
-- Monitoring script
-- All bonus services
-
-
-
-
-Key areas to understand:
-1. Operating System Choice
+2. Operating System
    - Differences between Debian and Rocky
    - Package management systems (apt vs dnf)
+   - The difference between aptitude and apt
    - System initialization (systemd)
-
-2. Security Implementations
-   - AppArmor/SELinux functionality
-   - UFW/firewalld configuration
-   - SSH security
-   - Password policies
+   - How to verify service status and configurations
 
 3. Advanced Partitioning
    - Benefits of the bonus partition structure
@@ -616,25 +641,32 @@ Key areas to understand:
    - Security considerations of partition separation
 
 4. System Administration
-   - User and group administration
+   - User and group administration commands
    - System monitoring
    - Cron job configuration
 
-5. Script Understanding
+5. Security Implementations
+   - what is AppArmor/SELinux and how do they work
+   - what is SSH how it works and security configuration
+   - what is UFW/firewalld how it works and configuration
+   - Password policies and implementation
+
+6. Script Understanding
+   - How the monitoring script works
    - Each command in monitoring.sh
    - System information retrieval methods
    - Wall command functionality
    - Crontab configuration
 
-6. WordPress Stack Components
+7. WordPress Stack Components
    - Role of each service (Lighttpd, MariaDB, PHP)
    - How they interact with each other
    - Security considerations for each component
 
-7. Additional Service (Fail2ban)
+8. Additional Service (Fail2ban)
    - Purpose and functionality
    - Security benefits
    - Configuration choices
    - Log monitoring and management
 
-This guide covers all mandatory requirements from the subject. Each component should be implemented in order, as later components often depend on earlier ones. Remember to document any modifications or custom configurations for the your defense.
+This guide covers all the requirements from the subject. Each component should be implemented in order, as later components often depend on earlier ones. Remember to document any modifications or custom configurations for the your defense.
